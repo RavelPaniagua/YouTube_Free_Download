@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Descarga de Videos de YouTube</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+	<script
+  src="https://code.jquery.com/jquery-3.6.0.js"
+  integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+  crossorigin="anonymous"></script>
+
+
+	<style type="text/css">
+		body{
+			background: #8E0E00;  /* fallback for old browsers */
+			background: -webkit-linear-gradient(to right, #1F1C18, #8E0E00);  /* Chrome 10-25, Safari 5.1-6 */
+			background: linear-gradient(to right, #1F1C18, #8E0E00); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+		}
+		h1{
+			color:white;
+			text-align: center;
+		}
+		img{
+			margin-top: 10px;
+			border: solid 1px;
+			border-radius: 50px;
+		}
+		#content-input{
+			width: 50%;
+			text-align: center;
+		}
+		button{
+			margin-top: 10px;
+		}
+	</style>
+</head>
+<body>
+	{% block body %}
+	<center><img src="static/youtube.jpg" width="100" /></center>
+	<br>
+	<h1>Descarga tus videos de YouTube</h1>
+	<center>
+		<div id="content-input">
+			<form action="{{url_for('home')}}" method="post">
+				<input type="text" name="url" placeholder="Http://"  class="form-control" required/>
+				<button id='btn_formulario' type="submit" class="btn btn-primary">Buscar</button>
+			</form>
+			
+			
+			
+		</div>
+	</center>
+	{% if url != undefined :%}
+	<div class="container">
+			<h1><input type="hidden" id="url_oculta" value="{{url}}">{{url}}</h1>
+			<div class="card">
+			  <div class="card-body">
+
+			  	<div class="row">
+			  		<div class="col">
+			  			<img src="{{image}}" style="width: 80%;" />
+			  		</div>
+			  		<div class="col">
+				  			<div style="float:right;margin-right: 100px;">
+							<!--<form action="{{url_for('home')}}" method="post">
+								<input type="hidden" name="descarga" value="1">
+								<button class="btn btn-success">Descargar</button>
+							</form>-->
+							<button class="btn btn-success" id="btn_descarga">Descargar</button>
+							<small id="label_descarga"></small>
+							<hr>
+							 <h5 class="card-title">{{titulo}}</h5>
+						    <p class="card-text">{{descripcion}}</p>
+						    <hr>
+						    <b>Segundos: </b><small>{{duracion}}</small>
+						    <br>
+						    <b>{{fecha_de_publicacion}}</b> 
+						</div>
+			  		</div>
+			  	</div> 
+			  </div>
+		</div>	
+	</div>
+
+		
+
+	{% endif %}
+	{% endblock %}
+	<script>
+		$(document).ready(function(){
+			$("#btn_descarga").click(function(){
+				let url = document.getElementById('url_oculta').value;
+				$.ajax({
+				    // la URL para la petición
+				    url : '/descarga?dwl=1&url='+url,
+
+				    // la información a enviar
+				    // (también es posible utilizar una cadena de datos)
+				   // data : { 'download' : 1 },
+
+				    // especifica si será una petición POST o GET
+				    //type : 'POST',
+
+				    // el tipo de información que se espera de respuesta
+				    //dataType : 'json',
+
+				    // código a ejecutar si la petición es satisfactoria;
+				    // la respuesta es pasada como argumento a la función
+				    success : function(result) {
+				        $("#label_descarga").html(result);
+				    },
+
+				    // código a ejecutar si la petición falla;
+				    // son pasados como argumentos a la función
+				    // el objeto de la petición en crudo y código de estatus de la petición
+				    error : function(xhr, status) {
+				        alert('Disculpe, existió un problema');
+				    },
+
+				    // código a ejecutar sin importar si la petición falló o no
+				    complete : function(xhr, status) {
+				        alert('Descarga Completada exitosamente!');
+				    }
+				});
+			});
+		});
+	</script>
+</body>
+</html>
