@@ -13,7 +13,7 @@ def home():
 	if request.method == 'POST':
 		url = request.form['url']
 		#bloque de informacion del video
-		path = 'C:\\Users\\1034756\\Downloads'
+		path = 'C:'
 		yt = YouTube(url)
 		print(yt)
 		titulo = yt.title
